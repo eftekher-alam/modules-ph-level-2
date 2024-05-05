@@ -55,6 +55,11 @@
     ];
 
 
+    // Generic with tuple
+    type GenericTuple<T1, T2> = [T1, T2];
+    const coordinate: GenericTuple<number, number> = [3, 5];
+    // console.log(coordinate);
+
 
 
 }
