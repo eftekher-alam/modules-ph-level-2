@@ -27,6 +27,5 @@
 
     getValueByPropNameGeneric<TStudent>(student1, "firstName");
 
-
     // 
 }
