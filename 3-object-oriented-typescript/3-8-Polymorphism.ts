@@ -18,6 +18,9 @@
     }
 
     const mydog = new Dog();
-    mydog.sound();
+    mydog.sound(); //Ghew...! Ghew...! Ghew...!
+
+    const myCow = new Cow();
+    myCow.sound(); //Hamba...! Hamba...! Hamba...!
     // ====================
 }
