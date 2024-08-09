@@ -8,9 +8,11 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
+const name = "shuvo";
+console.log(name);
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello World!')
-})
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
 
 export default app;
