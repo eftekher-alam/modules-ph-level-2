@@ -9,6 +9,8 @@ export default [
   { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
-  //The below line must be at the end so the this will apply at the last so the no chance to conflict
   eslintPluginPrettierRecommended,
+  {
+    rules: {},
+  },
 ];
