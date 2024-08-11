@@ -33,18 +33,21 @@ const stdLocalGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent>({
     id: { type: String },
     name: stdNameSchema,
-    gender: ["male", "female"], //enum
+    gender: { type: String, enum: ["male", "female"], required: true }, //enum used
     email: { type: String, required: true },
     dateOfBirth: { type: String },
     contactNo: { type: String, required: true },
     emergencyContactNo: { type: String, required: true },
-    bloodGroup: ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"], //enum
+    bloodGroup: {
+        type: String,
+        enum: ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"],
+    }, //enum used
     presentAddress: { type: String, required: true },
     permanentAddress: { type: String, required: true },
     guardian: stdGuardianSchema,
     localGuardian: stdLocalGuardianSchema,
     profileImg: { type: String },
-    isActive: ["active", "inactive"],
+    isActive: { type: String, enum: ["active", "inactive"] },
 });
 
 // ===========> Model <==============
