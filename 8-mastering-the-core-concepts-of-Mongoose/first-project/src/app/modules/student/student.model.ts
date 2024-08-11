@@ -51,4 +51,4 @@ const studentSchema = new Schema<TStudent>({
 // const Student = model<Interface/Type>("ModelName", ModelSchema);
 const Student = model<TStudent>("Student", studentSchema);
 
-export { studentSchema };
+export { Student, studentSchema };
