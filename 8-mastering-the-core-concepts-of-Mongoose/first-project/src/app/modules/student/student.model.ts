@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import {
     TGuardian,
     TLocalGuardian,
@@ -46,5 +46,9 @@ const studentSchema = new Schema<TStudent>({
     profileImg: { type: String },
     isActive: ["active", "inactive"],
 });
+
+// ===========> Model <==============
+// const Student = model<Interface/Type>("ModelName", ModelSchema);
+const Student = model<TStudent>("Student", studentSchema);
 
 export { studentSchema };
