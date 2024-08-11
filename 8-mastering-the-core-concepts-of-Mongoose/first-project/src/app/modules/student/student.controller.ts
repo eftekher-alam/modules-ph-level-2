@@ -18,4 +18,33 @@ const createStudentController = async (req: Request, res: Response) => {
     }
 };
 
-export const StudentControllers = { createStudentController };
+const readStudentsController = async (req: Request, res: Response) => {
+    try {
+        const result = await StudentServices.readStudentsService();
+
+        res.status(200).json({
+            success: true,
+            message: "Data found successfully.",
+            data: result,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const readStudentController = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await StudentServices.readStudentService(id);
+
+    res.status(200).json({
+        success: true,
+        message: "Found the student data with the given id",
+        data: result,
+    });
+};
+
+export const StudentControllers = {
+    createStudentController,
+    readStudentsController,
+    readStudentController,
+};

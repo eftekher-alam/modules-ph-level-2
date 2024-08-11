@@ -6,4 +6,18 @@ const createStudentService = async (student: TStudent) => {
     return result;
 };
 
-export const StudentServices = { createStudentService };
+const readStudentsService = async () => {
+    const result = await Student.find();
+    return result;
+};
+
+const readStudentService = async (id: string) => {
+    const result = await Student.findOne({ id });
+    return result;
+};
+
+export const StudentServices = {
+    createStudentService,
+    readStudentsService,
+    readStudentService,
+};
