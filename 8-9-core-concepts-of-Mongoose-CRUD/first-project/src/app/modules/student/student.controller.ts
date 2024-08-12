@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import { StudentServices } from "./student.service";
+import joiStudentSchema from "./student.validation";
 
 const createStudentController = async (req: Request, res: Response) => {
     try {
         const studentData = req.body.student;
+
+        const { error, value } = joiStudentSchema.validate(studentData);
+
+        console.log({ error: error, value: value });
+
         //the data will send to service
         const result = await StudentServices.createStudentService(studentData);
 
