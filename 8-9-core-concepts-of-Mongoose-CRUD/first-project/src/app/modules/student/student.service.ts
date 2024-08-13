@@ -1,8 +1,14 @@
 import { TStudent } from "./student.interface";
 import { Student } from "./student.model";
 
-const createStudentService = async (student: TStudent) => {
-    const result = await Student.create(student);
+const createStudentService = async (studentData: TStudent) => {
+    const student = new Student(studentData);
+    if (await student.isUserExist(student.id))
+        throw new Error(`User exist with this id: ${student.id}`);
+
+    const result = student.save();
+
+    // const result = await Student.create(student);
     return result;
 };
 

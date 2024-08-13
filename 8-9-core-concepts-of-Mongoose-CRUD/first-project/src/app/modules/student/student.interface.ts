@@ -1,6 +1,8 @@
 // here we can user type that will consider as interface
 // or we can use interface directly
 
+import { Model } from "mongoose";
+
 type TGuardian = {
     fatherName: string;
     fatherOccupation: string;
@@ -40,4 +42,17 @@ type TStudent = {
     isActive: "active" | "inactive";
 };
 
-export { TGuardian, TName, TLocalGuardian, TStudent };
+type TStudentMethods = {
+    isUserExist(id: string): Promise<TStudent | null>;
+};
+
+type StudentModel = Model<TStudent, object, TStudentMethods>;
+
+export {
+    TGuardian,
+    TName,
+    TLocalGuardian,
+    TStudent,
+    StudentModel,
+    TStudentMethods,
+};

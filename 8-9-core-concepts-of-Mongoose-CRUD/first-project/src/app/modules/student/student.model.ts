@@ -1,10 +1,12 @@
 import { model, Schema } from "mongoose";
 import validator from "validator";
 import {
+    StudentModel,
     TGuardian,
     TLocalGuardian,
     TName,
     TStudent,
+    TStudentMethods,
 } from "./student.interface";
 
 // =========> Schema <==========
@@ -48,7 +50,10 @@ const stdLocalGuardianSchema = new Schema<TLocalGuardian>({
     address: { type: String, required: true },
 });
 
-const studentSchema = new Schema<TStudent>({
+// 1. Send Student type
+// 2. Send the Model that created in the interface file (start with caps letter)
+// 3. Send method type
+const studentSchema = new Schema<TStudent, StudentModel, TStudentMethods>({
     id: { type: String, required: true, unique: true },
     name: { type: stdNameSchema, required: true },
     gender: {
@@ -84,8 +89,14 @@ const studentSchema = new Schema<TStudent>({
     isActive: { type: String, enum: ["active", "inactive"], default: "active" },
 });
 
+//Static method declaration
+studentSchema.method("isUserExist", async function isUserExist(id: string) {
+    const result = Student.findOne({ id });
+    return result;
+});
+
 // ===========> Model <==============
 // const Student = model<Interface/Type>("ModelName", ModelSchema);
-const Student = model<TStudent>("Student", studentSchema);
+const Student = model<TStudent, StudentModel>("Student", studentSchema);
 
 export { Student, studentSchema };

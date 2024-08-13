@@ -22,7 +22,7 @@ const createStudentController = async (req: Request, res: Response) => {
         // =============[zod validation]============
         const validStudentData = zodStudentSchema.parse(studentData);
 
-        console.log("validation: ", validStudentData);
+        // console.log("validation: ", validStudentData);
 
         //the data will send to service
         const result =
@@ -38,8 +38,7 @@ const createStudentController = async (req: Request, res: Response) => {
         res.status(500).json({
             success: false,
             message: "Something is wrong",
-            data: error,
-            // data: error instanceof Error ? error.message : error,
+            data: error instanceof Error ? error.message : error,
         });
     }
 };
