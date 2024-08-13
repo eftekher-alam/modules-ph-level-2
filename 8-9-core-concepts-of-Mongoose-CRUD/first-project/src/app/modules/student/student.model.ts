@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import validator from "validator";
+import bcrypt from "bcrypt";
 import {
     StaticStudentModel,
     // StudentModel,
@@ -9,6 +10,7 @@ import {
     TStudent,
     // TStudentMethods,
 } from "./student.interface";
+import config from "../../config";
 
 // =========> Schema <==========
 // We can breakdown all the code schemas for optimize.
@@ -59,6 +61,7 @@ const stdLocalGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StaticStudentModel>({
     id: { type: String, required: true, unique: true },
     name: { type: stdNameSchema, required: true },
+    password: { type: String },
     gender: {
         type: String,
         enum: {
@@ -101,6 +104,15 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>({
 //static method
 studentSchema.static("staticIsExist", async function staticIsExist(id) {
     return await Student.findOne({ id });
+});
+
+//Pre middleware
+studentSchema.pre("save", async function (next) {
+    this.password = bcrypt.hashSync(
+        this.password,
+        Number(config.bcrypt_salt_round),
+    );
+    next();
 });
 
 // ===========> Model <==============

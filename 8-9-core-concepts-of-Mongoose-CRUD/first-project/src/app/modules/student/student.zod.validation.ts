@@ -33,6 +33,7 @@ const stdLocalGuardianSchema = z.object({
 const zodStudentSchema = z.object({
     id: z.string(),
     name: stdNameSchema,
+    password: z.string(),
     gender: z.enum(["male", "female"], {
         errorMap: () => ({ message: "Gender can only be male or female" }),
     }),

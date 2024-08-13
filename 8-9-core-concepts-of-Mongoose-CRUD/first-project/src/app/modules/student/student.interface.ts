@@ -28,6 +28,7 @@ type TLocalGuardian = {
 type TStudent = {
     id: string;
     name: TName;
+    password: string;
     email: string;
     gender: "male" | "female";
     dateOfBirth?: string;
