@@ -1,12 +1,13 @@
 import { model, Schema } from "mongoose";
 import validator from "validator";
 import {
-    StudentModel,
+    StaticStudentModel,
+    // StudentModel,
     TGuardian,
     TLocalGuardian,
     TName,
     TStudent,
-    TStudentMethods,
+    // TStudentMethods,
 } from "./student.interface";
 
 // =========> Schema <==========
@@ -53,7 +54,9 @@ const stdLocalGuardianSchema = new Schema<TLocalGuardian>({
 // 1. Send Student type
 // 2. Send the Model that created in the interface file (start with caps letter)
 // 3. Send method type
-const studentSchema = new Schema<TStudent, StudentModel, TStudentMethods>({
+// const studentSchema = new Schema<TStudent, StudentModel, TStudentMethods>({ //its for instance method
+
+const studentSchema = new Schema<TStudent, StaticStudentModel>({
     id: { type: String, required: true, unique: true },
     name: { type: stdNameSchema, required: true },
     gender: {
@@ -89,14 +92,19 @@ const studentSchema = new Schema<TStudent, StudentModel, TStudentMethods>({
     isActive: { type: String, enum: ["active", "inactive"], default: "active" },
 });
 
-//Static method declaration
-studentSchema.method("isUserExist", async function isUserExist(id: string) {
-    const result = Student.findOne({ id });
-    return result;
+//instance  method declaration
+// studentSchema.method("isUserExist", async function isUserExist(id: string) {
+//     const result = Student.findOne({ id });
+//     return result;
+// });
+
+//static method
+studentSchema.static("staticIsExist", async function staticIsExist(id) {
+    return await Student.findOne({ id });
 });
 
 // ===========> Model <==============
 // const Student = model<Interface/Type>("ModelName", ModelSchema);
-const Student = model<TStudent, StudentModel>("Student", studentSchema);
+const Student = model<TStudent, StaticStudentModel>("Student", studentSchema);
 
 export { Student, studentSchema };

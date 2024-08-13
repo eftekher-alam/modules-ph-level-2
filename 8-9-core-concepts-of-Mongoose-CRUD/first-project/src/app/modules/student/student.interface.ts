@@ -42,17 +42,22 @@ type TStudent = {
     isActive: "active" | "inactive";
 };
 
-type TStudentMethods = {
-    isUserExist(id: string): Promise<TStudent | null>;
-};
+// type TStudentMethods = {
+//     isUserExist(id: string): Promise<TStudent | null>;
+// };
 
-type StudentModel = Model<TStudent, object, TStudentMethods>;
+interface StaticStudentModel extends Model<TStudent> {
+    staticIsExist(id: string): Promise<TStudent>;
+}
+
+// type StudentModel = Model<TStudent, object, TStudentMethods>; //its for instance method
 
 export {
     TGuardian,
     TName,
     TLocalGuardian,
     TStudent,
-    StudentModel,
-    TStudentMethods,
+    // StudentModel,
+    // TStudentMethods,
+    StaticStudentModel,
 };
