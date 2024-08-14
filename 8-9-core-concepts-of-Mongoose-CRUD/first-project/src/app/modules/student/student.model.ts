@@ -58,42 +58,59 @@ const stdLocalGuardianSchema = new Schema<TLocalGuardian>({
 // 3. Send method type
 // const studentSchema = new Schema<TStudent, StudentModel, TStudentMethods>({ //its for instance method
 
-const studentSchema = new Schema<TStudent, StaticStudentModel>({
-    id: { type: String, required: true, unique: true },
-    name: { type: stdNameSchema, required: true },
-    password: { type: String },
-    gender: {
-        type: String,
-        enum: {
-            //enum used here with custom message
-            values: ["male", "female"],
-            //here {VALUE} will print given data with the message
-            message: "{VALUE} is not valid. Gender can only be male or female",
+const studentSchema = new Schema<TStudent, StaticStudentModel>(
+    {
+        id: { type: String, required: true, unique: true },
+        name: { type: stdNameSchema, required: true },
+        password: { type: String },
+        gender: {
+            type: String,
+            enum: {
+                //enum used here with custom message
+                values: ["male", "female"],
+                //here {VALUE} will print given data with the message
+                message:
+                    "{VALUE} is not valid. Gender can only be male or female",
+            },
+            required: true,
         },
-        required: true,
+        email: {
+            type: String,
+            required: [true, "Email is required."],
+            validate: {
+                validator: (value: string) => validator.isEmail(value),
+                message: `{VALUE} is not valid email.`,
+            },
+        }, //custom validation massage
+        dateOfBirth: { type: String },
+        contactNo: { type: String, required: true },
+        emergencyContactNo: { type: String, required: true },
+        bloodGroup: {
+            type: String,
+            enum: ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"],
+        }, //enum used
+        presentAddress: { type: String, required: true },
+        permanentAddress: { type: String, required: true },
+        guardian: { type: stdGuardianSchema, required: true },
+        localGuardian: { type: stdLocalGuardianSchema, required: true },
+        profileImg: { type: String },
+        isActive: {
+            type: String,
+            enum: ["active", "inactive"],
+            default: "active",
+        },
+        isDeleted: Boolean,
     },
-    email: {
-        type: String,
-        required: [true, "Email is required."],
-        validate: {
-            validator: (value: string) => validator.isEmail(value),
-            message: `{VALUE} is not valid email.`,
+    {
+        toJSON: {
+            virtuals: true,
         },
-    }, //custom validation massage
-    dateOfBirth: { type: String },
-    contactNo: { type: String, required: true },
-    emergencyContactNo: { type: String, required: true },
-    bloodGroup: {
-        type: String,
-        enum: ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"],
-    }, //enum used
-    presentAddress: { type: String, required: true },
-    permanentAddress: { type: String, required: true },
-    guardian: { type: stdGuardianSchema, required: true },
-    localGuardian: { type: stdLocalGuardianSchema, required: true },
-    profileImg: { type: String },
-    isActive: { type: String, enum: ["active", "inactive"], default: "active" },
-    isDeleted: Boolean,
+    },
+);
+
+//virtual property or used for view model.
+studentSchema.virtual("fullName").get(function () {
+    return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 //instance  method declaration
@@ -107,7 +124,7 @@ studentSchema.static("staticIsExist", async function staticIsExist(id) {
     return await Student.findOne({ id });
 });
 
-//Pre middleware
+//Pre document middleware
 studentSchema.pre("save", async function (next) {
     this.password = bcrypt.hashSync(
         this.password,
@@ -116,8 +133,29 @@ studentSchema.pre("save", async function (next) {
     next();
 });
 
+//Post document middleware
 studentSchema.post("save", function (doc, next) {
     doc.password = ""; //the password should not send to the response.
+    next();
+});
+
+// Query middleware
+// It will prevent from retrieve those document which has isDeleted: true
+studentSchema.pre("find", function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+
+// [ $match: { id: "S120011"} ] this is pipeline of aggregate, the aggregate exist in the service
+//Goal is to add the below filter to the pipeline array at the first position
+// { $match: { $isDeleted: { $ne: true } } }
+studentSchema.pre("aggregate", function (next) {
+    this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+    next();
+});
+
+studentSchema.pre("findOne", function (next) {
+    this.find({ isDeleted: { $ne: true } });
     next();
 });
 

@@ -22,7 +22,9 @@ const readStudentsService = async () => {
 };
 
 const readStudentService = async (id: string) => {
-    const result = await Student.findOne({ id });
+    // const result = await Student.findOne({ id });
+
+    const result = await Student.aggregate([{ $match: { id } }]);
     return result;
 };
 
