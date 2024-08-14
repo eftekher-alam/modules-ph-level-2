@@ -26,8 +26,20 @@ const readStudentService = async (id: string) => {
     return result;
 };
 
+const deleteStudentService = async (id: string) => {
+    console.log("id : ", id);
+
+    const result = await Student.updateOne({ id }, { isDeleted: true });
+    console.log("From service : ", result);
+
+    if (result.modifiedCount) {
+        return result;
+    } else throw new Error("Failed to delete");
+};
+
 export const StudentServices = {
     createStudentService,
     readStudentsService,
     readStudentService,
+    deleteStudentService,
 };

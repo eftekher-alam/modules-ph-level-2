@@ -6,5 +6,9 @@ const router = express.Router(); //All the routes will be create in this route o
 router.post("/create-student", StudentControllers.createStudentController);
 router.get("/read-students", StudentControllers.readStudentsController);
 router.get("/read-student/:id", StudentControllers.readStudentController);
+router.delete(
+    "/delete-student/:id",
+    StudentControllers.deleteStudentController,
+);
 
 export const StudentRoutes = router;

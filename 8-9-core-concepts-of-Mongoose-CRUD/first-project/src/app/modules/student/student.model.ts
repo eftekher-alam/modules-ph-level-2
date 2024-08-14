@@ -93,6 +93,7 @@ const studentSchema = new Schema<TStudent, StaticStudentModel>({
     localGuardian: { type: stdLocalGuardianSchema, required: true },
     profileImg: { type: String },
     isActive: { type: String, enum: ["active", "inactive"], default: "active" },
+    isDeleted: Boolean,
 });
 
 //instance  method declaration
@@ -112,6 +113,11 @@ studentSchema.pre("save", async function (next) {
         this.password,
         Number(config.bcrypt_salt_round),
     );
+    next();
+});
+
+studentSchema.post("save", function (doc, next) {
+    doc.password = ""; //the password should not send to the response.
     next();
 });
 

@@ -50,6 +50,7 @@ const zodStudentSchema = z.object({
     localGuardian: stdLocalGuardianSchema,
     profileImg: z.string().optional(),
     isActive: z.enum(["active", "inactive"]).default("active"),
+    isDeleted: z.boolean(),
 });
 
 // Export the schema
