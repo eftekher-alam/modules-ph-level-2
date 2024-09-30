@@ -26,6 +26,8 @@ const allMentors = {
     ...mentors2
 }
 
+
+
 // rest operator 
 function sum(...numbers: number[]): number {
     let total: number = 0;
